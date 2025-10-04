@@ -1,87 +1,108 @@
-# 動画圧縮ツール - 音質優先版
+# Video Compressor - Audio Quality Priority
 
-macOS用の動画圧縮CLIツール。目標ファイルサイズを指定して、音質を優先しながら動画を圧縮できるわ。
+[日本語](README_ja.md) | [中文](README_zh.md)
 
-## 特徴
+A video compression CLI tool for macOS. Compress videos to a target file size while prioritizing audio quality.
 
-- **目標サイズを正確に指定**: MB単位で目標サイズを指定可能(小数点可)
-- **音質優先**: 音声ビットレート192kbpsで高音質を維持
-- **リアルタイム進捗表示**: プログレスバーと残り時間を表示
-- **2パスエンコーディング**: 高品質な圧縮を実現
-- **拡張子変換対応**: MP4, MOV, AVI, MKV, WebM, FLV
-- **わかりやすいエラー表示**: ありがちなミスを全部キャッチ
+## Features
 
-## 必須要件
+- **Precise Size Control**: Specify target size in MB (decimal support)
+- **Audio Quality Priority**: Maintains high audio quality at 192kbps
+- **Real-time Progress Display**: Shows progress bar and estimated time remaining
+- **2-Pass Encoding**: Achieves high-quality compression
+- **Batch Processing**: Process entire directories at once
+- **Dry Run Mode**: Preview compression results without actual encoding
+- **Format Conversion**: Supports MP4, MOV, AVI, MKV, WebM, FLV
+- **Comprehensive Error Handling**: Clear error messages for common issues
+
+## Requirements
 
 - macOS
-- Python 3.8以上
+- Python 3.8 or later
 - ffmpeg
 
-## インストール
+## Installation
 
-### 1. ffmpegのインストール
+### 1. Install ffmpeg
 
 ```bash
 brew install ffmpeg
 ```
 
-### 2. スクリプトのダウンロード
+### 2. Download Script
 
 ```bash
-# GitHubからクローン(個人用アカウント使用)
+# Clone from GitHub
 git clone https://github.com/hiroki-abe-58/video-compressor.git
 cd video-compressor
 
-# または、直接ダウンロード
+# Or download directly
 curl -O https://raw.githubusercontent.com/hiroki-abe-58/video-compressor/main/compress_video.py
 chmod +x compress_video.py
 ```
 
-### 3. 実行権限付与
+### 3. Grant Execute Permission
 
 ```bash
 chmod +x compress_video.py
 ```
 
-## 使い方
+## Usage
 
-### 基本的な使い方
+### Basic Usage
 
 ```bash
 python3 compress_video.py
 ```
 
-または
+Or:
 
 ```bash
 ./compress_video.py
 ```
 
-### 実行フロー
+### Command Line Options
 
-#### フェーズ1: 動画パス入力
+```bash
+# Normal mode
+./compress_video.py
+
+# Dry run mode (preview without encoding)
+./compress_video.py --dry-run
+
+# Show version
+./compress_video.py --version
+
+# Show help
+./compress_video.py --help
 ```
-動画のパスを入力し、エンターを押してください:
+
+### Execution Flow
+
+#### Phase 1: Input File Path
+```
+Enter the path to the video file or directory and press Enter:
 > /path/to/video.mp4
 ```
 
-**Tips**: ファインダーからドラッグ&ドロップでもOK
+**Tip**: Drag and drop from Finder works too
 
-#### フェーズ2: 目標サイズ入力
+#### Phase 2: Target Size Input
 ```
-ファイル名: video.mp4
-現在のファイル容量: 150.50 MB
-動画の長さ: 00:05:30
+File name: video.mp4
+Current file size: 150.50 MB
+Video duration: 00:05:30
 
-この動画を何MBまで圧縮しますか？数字を入力しエンターを押してください。(小数点可):
+To what size (MB) should this video be compressed? Enter a number (decimals allowed):
 > 50
 ```
 
-#### フェーズ3: 拡張子変換(オプション)
+#### Phase 3: Format Conversion (Optional)
 ```
-拡張子は変換しますか？ (y/何も入力せずEnter): y
+Do you want to convert the file extension? (y/press Enter):
+> y
 
-変換可能な形式:
+Available formats:
   1. MP4 (H.264)
   2. MOV (QuickTime)
   3. AVI
@@ -89,98 +110,158 @@ python3 compress_video.py
   5. WebM
   6. FLV (Flash Video)
 
-番号を選択してください: 1
+Select a number: 1
 ```
 
-#### フェーズ4: 圧縮実行
+#### Phase 4: Compression
 ```
-[1/2] 1パス目: ビットレート解析中...
-1パス目: [████████████████████░░░░░░░░░░░░░░░░░░░░]  48.5% | 残り時間: 00:02:15
+[1/2] Pass 1: Analyzing bitrate...
+Pass 1: [████████████████████░░░░░░░░░░░░░░░░░░░░]  48.5% | Time remaining: 00:02:15
 
-[2/2] 2パス目: 最終エンコード中...
-2パス目: [████████████████████████████████████████] 100.0% | 残り時間: 00:00:00
+[2/2] Pass 2: Final encoding...
+Pass 2: [████████████████████████████████████████] 100.0% | Time remaining: 00:00:00
 ```
 
-#### フェーズ5: 完了
+#### Phase 5: Complete
 ```
-✅ 圧縮が完了し、圧縮した動画ファイルは保存されました!
+Compression complete! The compressed video file has been saved.
 ============================================================
-ファイル名: video--compressed--50.0MB--2025-10-04-15-30-45.mp4
-保存先: /path/to/video--compressed--50.0MB--2025-10-04-15-30-45.mp4
-目標サイズ: 50.00 MB
-実際のサイズ: 49.85 MB
-差分: 0.15 MB
+File name: video--compressed--50.0MB--2025-10-04-15-30-45.mp4
+Save location: /path/to/video--compressed--50.0MB--2025-10-04-15-30-45.mp4
+Target size: 50.00 MB
+Actual size: 49.85 MB
+Difference: 0.15 MB
 ============================================================
+
+Compress another video? (y/n):
 ```
 
-## 📝 出力ファイル名の形式
+### Dry Run Mode
+
+Preview compression results without actual encoding:
+
+```bash
+./compress_video.py --dry-run
+```
+
+**Output Example**:
+```
+Dry Run Results
+============================================================
+Input file: video.mp4
+Current size: 150.50 MB
+Target size: 50.00 MB
+Compression ratio: 66.8%
+Video duration: 00:05:30
+
+[Encoding Settings]
+  Video bitrate: 1145 kbps
+  Audio bitrate: 192 kbps (AAC)
+  Codec: H.264 (libx264)
+
+[Estimated Quality]
+  High quality (minor degradation)
+
+[Output File]
+  File name: video--compressed--50.0MB--2025-10-04-15-30-45.mp4
+  Save location: /path/to/video--compressed--50.0MB--2025-10-04-15-30-45.mp4
+============================================================
+
+To actually compress, run without the --dry-run option.
+```
+
+### Batch Processing
+
+Process all video files in a directory:
+
+```bash
+./compress_video.py
+
+# Enter directory path
+> /Users/username/Videos/batch-compress/
+
+# 5 video files found:
+#   1. video1.mp4 (150.50 MB)
+#   2. video2.mov (200.30 MB)
+#   ...
+
+# Select settings method:
+#   1. Batch settings (apply same settings to all files)
+#   2. Individual settings (configure each file separately)
+```
+
+## Output File Format
 
 ```
-[元ファイル名]--compressed--[目標サイズ]MB--[yyyy-mm-dd-hh-mm-ss].[拡張子]
+[original_filename]--compressed--[target_size]MB--[yyyy-mm-dd-hh-mm-ss].[extension]
 ```
 
-例:
+Example:
 ```
 my_video--compressed--50.0MB--2025-10-04-15-30-45.mp4
 ```
 
-## 🛡️ エラーハンドリング
+## Error Handling
 
-このツールは以下のエラーを検出して、わかりやすく表示するで:
+This tool detects and clearly displays the following errors:
 
-- ❌ ffmpegが未インストール
-- ❌ ファイルが存在しない
-- ❌ サポートされていないファイル形式
-- ❌ 目標サイズが現在のサイズより大きい
-- ❌ 目標サイズが小さすぎる(音声だけで容量オーバー)
-- ❌ 無効な入力値(数字以外など)
-- ❌ エンコード中のエラー
+- ffmpeg not installed
+- File does not exist
+- Unsupported file format
+- Target size larger than current size
+- Target size too small (audio alone exceeds capacity)
+- Invalid input values (non-numeric)
+- Encoding errors
 
-## 🎛️ 技術詳細
+## Technical Details
 
-### 圧縮アルゴリズム
+### Compression Algorithm
 
-1. **動画の長さを取得** (ffprobe使用)
-2. **音声ビットレートを192kbpsに固定** (高音質維持)
-3. **目標サイズから必要なビデオビットレートを逆算**
+1. **Get video duration** (using ffprobe)
+2. **Fix audio bitrate at 192kbps** (maintain high quality)
+3. **Calculate required video bitrate from target size**
    ```
-   ビデオビットレート = (目標サイズ - 音声サイズ) / 動画の長さ * 0.95
+   Video bitrate = (target size - audio size) / video duration * 0.95
    ```
-4. **2パスエンコーディングで高品質圧縮**
-   - 1パス目: ビットレート配分を解析
-   - 2パス目: 最適化されたエンコーディング
+4. **High-quality compression with 2-pass encoding**
+   - Pass 1: Analyze bitrate distribution
+   - Pass 2: Optimized encoding
 
-### サポートファイル形式
+### Supported File Formats
 
-**入力**: `.mp4`, `.avi`, `.mov`, `.mkv`, `.flv`, `.wmv`, `.webm`, `.m4v`, `.mpeg`, `.mpg`
+**Input**: `.mp4`, `.avi`, `.mov`, `.mkv`, `.flv`, `.wmv`, `.webm`, `.m4v`, `.mpeg`, `.mpg`
 
-**出力**: `.mp4`, `.mov`, `.avi`, `.mkv`, `.webm`, `.flv`
+**Output**: `.mp4`, `.mov`, `.avi`, `.mkv`, `.webm`, `.flv`
 
-## 🔧 トラブルシューティング
+## Troubleshooting
 
-### ffmpegが見つからない
+### ffmpeg not found
 ```bash
 brew install ffmpeg
 ```
 
-### 圧縮に時間がかかりすぎる
-- 2パスエンコーディングは時間がかかる(1パス目+2パス目)
-- 長い動画だと数十分かかることもある
-- プログレスバーで進捗確認できるで
+### Compression takes too long
+- 2-pass encoding is time-consuming (pass 1 + pass 2)
+- Long videos may take tens of minutes
+- Progress can be monitored via progress bar
 
-### 目標サイズとずれる
-- ±5%程度の誤差は正常
-- より正確にしたい場合は、目標サイズを少し小さめに設定
+### Target size deviation
+- Deviation of ±5% is normal
+- For more accuracy, set target size slightly smaller
 
-### エンコードが失敗する
-- ディスク容量を確認
-- 動画ファイルが壊れていないか確認
-- 別の拡張子で試す
+### Encoding fails
+- Check disk space
+- Verify video file is not corrupted
+- Try a different extension
 
-## ライセンス
+## License
 
 MIT License
 
-## 作者
+## Author
 
 [hiroki-abe-58](https://github.com/hiroki-abe-58)
+
+## Acknowledgments
+
+Reference: https://note.com/genelab_999/n/n5db5c3a80793
