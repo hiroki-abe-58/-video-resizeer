@@ -1,0 +1,9 @@
+# 動画圧縮ツールの依存関係
+# Python 3.8以上が必要
+
+# 特に追加のPythonパッケージは不要
+# 標準ライブラリのみ使用
+
+# 必須の外部ツール:
+# - ffmpeg (Homebrewでインストール: brew install ffmpeg)
+# - ffprobe (ffmpegに含まれる)
