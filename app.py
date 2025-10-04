@@ -209,17 +209,6 @@ class VideoCompressor:
     
     def run(self):
         """メイン処理"""
-        print("=" * 60)
-        print("🎥 動画圧縮ツール - 音質優先版")
-        print("=" * 60)
-        
-        # ffmpegチェック
-        if not self.check_ffmpeg():
-            print("\n❌ エラー: ffmpegがインストールされてないわ")
-            print("以下のコマンドでインストールしてくれ:")
-            print("  brew install ffmpeg")
-            sys.exit(1)
-        
         # フェーズ1: ファイルパス入力
         self.input_path = self._phase1_get_file_path()
         
@@ -234,6 +223,13 @@ class VideoCompressor:
         
         # フェーズ4 & 5: 圧縮実行
         self._phase4_compress()
+    
+    def reset(self):
+        """次の圧縮のために変数をリセット"""
+        self.input_path = None
+        self.target_size_mb = None
+        self.output_format = None
+        self.video_info = None
     
     def _phase1_get_file_path(self) -> Path:
         """フェーズ1: 動画ファイルパス取得"""
@@ -360,8 +356,36 @@ class VideoCompressor:
 def main():
     """エントリーポイント"""
     try:
+        print("=" * 60)
+        print("🎥 動画圧縮ツール - 音質優先版")
+        print("=" * 60)
+        
         compressor = VideoCompressor()
-        compressor.run()
+        
+        # ffmpegチェック(初回のみ)
+        if not compressor.check_ffmpeg():
+            print("\n❌ エラー: ffmpegがインストールされてないわ")
+            print("以下のコマンドでインストールしてくれ:")
+            print("  brew install ffmpeg")
+            sys.exit(1)
+        
+        # 圧縮ループ
+        while True:
+            # 圧縮実行
+            compressor.run()
+            
+            # 次の動画を圧縮するか確認
+            print("\n" + "=" * 60)
+            continue_choice = input("もう1本圧縮する？ (y/n): ").strip().lower()
+            
+            if continue_choice != 'y':
+                print("\n👋 お疲れさん!またな!")
+                break
+            
+            # 変数リセット
+            compressor.reset()
+            print("\n")
+        
     except KeyboardInterrupt:
         print("\n\n⚠️  処理が中断されました。")
         sys.exit(0)
